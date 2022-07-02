@@ -1,7 +1,11 @@
 import { NavLink } from "react-router-dom";
 import "./MainNavigation.sass";
+import { useContext } from "react";
+import FavoritesContext from "../../store/favorites-context";
 
 export function MainNavigation() {
+  const favoritesCtx = useContext(FavoritesContext);
+
   const navi = [
     {
       name: "All Meetups",
@@ -44,7 +48,9 @@ export function MainNavigation() {
                   >
                     {name}
                     {to === "/favorites" && (
-                      <span className="badge ms-2 text-bg-primary">2</span>
+                      <span className="badge ms-2 text-bg-primary">
+                        {favoritesCtx.totalFavorites}
+                      </span>
                     )}
                   </NavLink>
                 </li>
