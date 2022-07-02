@@ -2,8 +2,11 @@ import { FormProvider } from "react-hook-form";
 import { useCustomForm } from "../../hooks/useCustomForm";
 import { TextControl } from "../forms/TextControl";
 import { TextareaControl } from "../forms/TextareaControl";
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 export function NewMeetupForm(props) {
+  const navigate = useNavigate();
   const {
     formId,
     methods,
@@ -12,9 +15,31 @@ export function NewMeetupForm(props) {
     formState: { isSubmitting },
   } = useCustomForm(props);
 
+  const [isError, setIsError] = useState(false);
+
   const onSubmit = (data) => {
     console.log(data);
-    alert("Okay");
+    setIsError(false);
+    return fetch(
+      "https://learn-react-6a98d-default-rtdb.firebaseio.com/meetups.json",
+      {
+        method: "POST",
+        body: JSON.stringify(data),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    )
+      .then((response) => {
+        if (!response.ok) {
+          throw Error(response.statusText);
+        }
+        navigate("/", { replace: true });
+      })
+      .catch((err) => {
+        console.log(err);
+        setIsError(true);
+      });
   };
 
   const registerOptions = {
@@ -58,6 +83,12 @@ export function NewMeetupForm(props) {
             registerOptions={registerOptions.description}
           />
         </div>
+
+        {isError && (
+          <div className="alert alert-danger">
+            <div>Error send form. Please try later</div>
+          </div>
+        )}
 
         <button
           type="submit"
