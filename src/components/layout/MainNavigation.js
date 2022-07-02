@@ -1,15 +1,19 @@
+import { NavLink } from "react-router-dom";
 import "./MainNavigation.sass";
 
 export function MainNavigation() {
   const navi = [
     {
       name: "All Meetups",
+      to: "/",
     },
     {
       name: "Add new Meetup",
+      to: "/new-meetup",
     },
     {
       name: "Favorites",
+      to: "/favorites",
     },
   ];
 
@@ -31,14 +35,18 @@ export function MainNavigation() {
           </button>
           <div className="collapse navbar-collapse" id="navbarNav">
             <ul className="navbar-nav">
-              {navi.map(({ name }, index) => (
+              {navi.map(({ name, to }, index) => (
                 <li key={index} className="nav-item">
-                  <a href="#" className="nav-link">
+                  <NavLink
+                    to={to}
+                    className="nav-link position-relative"
+                    aria-current="page"
+                  >
                     {name}
-                    {name === "Favorites" && (
+                    {to === "/favorites" && (
                       <span className="badge ms-2 text-bg-primary">2</span>
                     )}
-                  </a>
+                  </NavLink>
                 </li>
               ))}
             </ul>
